@@ -6,26 +6,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
-from ucimlrepo import fetch_ucirepo 
 
 # Configuración del correo
 username = "info@expertweb.com.ec"
 password = "k.bDHW8#T$9Q"
 imap_server = "mail.expertweb.com.ec"
 imap_port = 993
-
-# fetch dataset 
-phiusiil_phishing_url_website = fetch_ucirepo(id=967) 
-  
-# data (as pandas dataframes) 
-X = phiusiil_phishing_url_website.data.features 
-y = phiusiil_phishing_url_website.data.targets 
-  
-# metadata 
-print(phiusiil_phishing_url_website.metadata) 
-  
-# variable information 
-print(phiusiil_phishing_url_website.variables)
 
 # Función para obtener correos electrónicos no leídos
 def get_emails():
@@ -67,8 +53,8 @@ def load_and_preprocess_data():
 
 # Entrenar el modelo
 def train_model(data):
-    X = phiusiil_phishing_url_website.data.features 
-    y = phiusiil_phishing_url_website.data.targets 
+    X = data['combined']
+    y = data['label']
     vectorizer = TfidfVectorizer(stop_words='english')
     X = vectorizer.fit_transform(X)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
