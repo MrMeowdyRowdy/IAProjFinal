@@ -6,7 +6,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
-from ucimlrepo import fetch_ucirepo 
+from ucimlrepo import fetch_ucirepo
+import os
+os.environ['OMP_NUM_THREADS'] = '6'
 
 # Configuración del correo
 username = "info@expertweb.com.ec"
@@ -18,9 +20,6 @@ imap_port = 993
 phiusiil_phishing_url_website = fetch_ucirepo(id=967) 
   
 # data (as pandas dataframes) 
-X = phiusiil_phishing_url_website.data.features 
-y = phiusiil_phishing_url_website.data.targets 
-  
 # metadata 
 print(phiusiil_phishing_url_website.metadata) 
   
@@ -57,16 +56,16 @@ def get_emails():
     return emails
 
 # Cargar y preprocesar el conjunto de datos
-def load_and_preprocess_data():
-    data = pd.read_csv('COLOCAR AQUÍ LA RUTA DE LOS DATOS')
-    data['text'] = data['text'].str.lower().str.replace(r'[^\w\s]', '')
-    data['sender'] = data['sender'].str.lower().str.replace(r'[^\w\s]', '')
-    data['subject'] = data['subject'].str.lower().str.replace(r'[^\w\s]', '')
-    data['combined'] = data['sender'] + ' ' + data['subject'] + ' ' + data['text']
-    return data
+# def load_and_preprocess_data():
+#     data = pd.read_csv('COLOCAR AQUÍ LA RUTA DE LOS DATOS')
+#     data['text'] = data['text'].str.lower().str.replace(r'[^\w\s]', '')
+#     data['sender'] = data['sender'].str.lower().str.replace(r'[^\w\s]', '')
+#     data['subject'] = data['subject'].str.lower().str.replace(r'[^\w\s]', '')
+#     data['combined'] = data['sender'] + ' ' + data['subject'] + ' ' + data['text']
+#     return data
 
 # Entrenar el modelo
-def train_model(data):
+def train_model():
     X = phiusiil_phishing_url_website.data.features 
     y = phiusiil_phishing_url_website.data.targets 
     vectorizer = TfidfVectorizer(stop_words='english')
@@ -89,8 +88,8 @@ def predict_spam(model, vectorizer, sender, subject, email):
 def main():
     emails = get_emails()
     print(f"Se importaron {len(emails)} correos no leídos.")
-    data = load_and_preprocess_data()
-    model, vectorizer = train_model(data)
+    #data = load_and_preprocess_data()
+    model, vectorizer = train_model()
     for mail in emails:
         sender = mail['from']
         subject = mail['subject']
