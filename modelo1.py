@@ -10,7 +10,7 @@ from ucimlrepo import fetch_ucirepo
 
 import os
 
-os.environ['OMP_NUM_THREADS'] = '10'
+os.environ['OMP_NUM_THREADS'] = '11'
 
 # Configuración del correo
 username = "info@expertweb.com.ec"
